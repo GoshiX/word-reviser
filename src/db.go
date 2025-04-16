@@ -38,10 +38,6 @@ func initDB() DB {
 
 }
 
-func (db *DB) Close() {
-	db.db.Close()
-}
-
 func (db *DB) CreateTables() {
 	res, err := db.db.Query(`
 	CREATE TABLE IF NOT EXISTS words 
