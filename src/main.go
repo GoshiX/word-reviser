@@ -81,8 +81,9 @@ func main() {
 	}
 
 	b.SetCommands([]tb.Command{
-		{Text: "/stat", Description: "Show statistics"},
 		{Text: "/quiz", Description: "Start quiz"},
+		{Text: "/list", Description: "List your words"},
+		{Text: "/stat", Description: "Show statistics"},
 	})
 
 	db = initDB()
@@ -100,6 +101,18 @@ func main() {
 	})
 
 	b.Handle("/quiz", startQuiz)
+
+	b.Handle("/list", func(c tb.Context) error {
+		words := db.GetWords(int(c.Sender().ID))
+		if len(words) == 0 {
+			return c.Send("You have no words😭")
+		}
+		message := "Here are your words📚:\n"
+		for _, word := range words {
+			message += fmt.Sprintf("\n %s - %s", word.WordEn, word.WordRu)
+		}
+		return c.Send(message, &tb.SendOptions{ParseMode: tb.ModeMarkdown})
+	})
 
 	b.Handle(tb.OnText, func(c tb.Context) error {
 

@@ -90,6 +90,23 @@ func (db *DB) GetWord(id int) Word {
 	return word
 }
 
+func (db *DB) GetWords(id int) []Word {
+	var words []Word
+	rows, err := db.db.Query("SELECT * FROM words WHERE aithor_id = $1 AND show = true", id)
+	if err != nil {
+		log.Println(err)
+	}
+	for rows.Next() {
+		var word Word
+		err := rows.Scan(&word.Id, &word.WordEn, &word.WordRu, &word.Author, &word.Show, &word.Total, &word.Corr)
+		if err != nil {
+			log.Println(err)
+		}
+		words = append(words, word)
+	}
+	return words
+}
+
 func (db *DB) UpdateWord(word Word) error {
 	_, err := db.db.Exec("UPDATE words SET show = $1, total = $2, corr = $3 WHERE id = $4", word.Show, word.Total, word.Corr, word.Id)
 	if err != nil {
