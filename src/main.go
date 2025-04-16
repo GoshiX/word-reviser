@@ -80,13 +80,18 @@ func main() {
 		return
 	}
 
+	b.SetCommands([]tb.Command{
+		{Text: "/stat", Description: "Show statistics"},
+		{Text: "/quiz", Description: "Start quiz"},
+	})
+
 	db = initDB()
 	log.Println("Connected to database")
 
 	b.Use(Logger)
 
 	b.Handle("/start", func(c tb.Context) error {
-		return c.Send("Hello! This is a bot for learning English words\n\nBy @goshanmorev with ❤️")
+		return c.Send("Hello! This is a bot for learning English words.🤯\nWrite any word to translate it and add to your dictionary.📝\n\nBy @goshanmorev with ❤️")
 	})
 
 	b.Handle("/stat", func(c tb.Context) error {
