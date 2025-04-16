@@ -107,9 +107,9 @@ func main() {
 		if len(words) == 0 {
 			return c.Send("You have no words😭")
 		}
-		message := "Here are your words📚:\n"
+		message := "Here are your words📚 (right/total):\n"
 		for _, word := range words {
-			message += fmt.Sprintf("\n %s - %s", word.WordEn, word.WordRu)
+			message += fmt.Sprintf("\n %s - %s (%d/%d)", word.WordEn, word.WordRu, word.Corr, word.Total)
 		}
 		return c.Send(message, &tb.SendOptions{ParseMode: tb.ModeMarkdown})
 	})
