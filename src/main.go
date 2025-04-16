@@ -45,7 +45,7 @@ var (
 func startQuiz(c tb.Context) error {
 	word := db.GetRandomWord(int(c.Sender().ID))
 	if word.Id == 0 {
-		return c.Send("You have no words")
+		return c.Send("You have no words😭")
 	}
 
 	wordSend := ""
@@ -91,7 +91,7 @@ func main() {
 
 	b.Handle("/stat", func(c tb.Context) error {
 		total, learning := db.GetWordsAmount(int(c.Sender().ID))
-		return c.Send(fmt.Sprintf("Total words: %d\nLearning words: %d", total, learning))
+		return c.Send(fmt.Sprintf("Total words📚: %d\nLearning words🧠: %d", total, learning))
 	})
 
 	b.Handle("/quiz", startQuiz)
@@ -103,7 +103,7 @@ func main() {
 				tb.InlineButton{Data: "add_word\n" + waitingTranslion[int(c.Sender().ID)] + "\n" + c.Text(), Text: "Add " + c.Text()},
 			}}
 			inlineMarkup := &tb.ReplyMarkup{InlineKeyboard: inlineKeys}
-			c.Send("Add new word?\n\nWord: *"+waitingTranslion[int(c.Sender().ID)]+"*\nTranslation: *"+c.Text()+"*", &tb.SendOptions{ParseMode: tb.ModeMarkdown}, inlineMarkup)
+			c.Send("Add new word❓\n\nWord: *"+waitingTranslion[int(c.Sender().ID)]+"*\nTranslation: *"+c.Text()+"*", &tb.SendOptions{ParseMode: tb.ModeMarkdown}, inlineMarkup)
 
 			delete(waitingTranslion, int(c.Sender().ID))
 			return nil
@@ -120,7 +120,7 @@ func main() {
 			{tb.InlineButton{Data: "change_translation\n" + word_en, Text: "Change translation"}},
 		}
 		inlineMarkup := &tb.ReplyMarkup{InlineKeyboard: inlineKeys}
-		return c.Send("Add new word?\n\nWord: *"+word_en+"*\nTranslation: *"+word_ru+"*", &tb.SendOptions{ParseMode: tb.ModeMarkdown}, inlineMarkup)
+		return c.Send("Add new word❓\n\nWord: *"+word_en+"*\nTranslation: *"+word_ru+"*", &tb.SendOptions{ParseMode: tb.ModeMarkdown}, inlineMarkup)
 
 	})
 
@@ -133,7 +133,7 @@ func main() {
 			if err != nil {
 				c.Send(err.Error())
 			} else {
-				c.Send("Word added!\n\nWord: *"+data[1]+"*\nTranslation: *"+data[2]+"*", &tb.SendOptions{ParseMode: tb.ModeMarkdown})
+				c.Send("Word added🎉\n\nWord: *"+data[1]+"*\nTranslation: *"+data[2]+"*", &tb.SendOptions{ParseMode: tb.ModeMarkdown})
 			}
 
 		case "change_translation":
@@ -148,7 +148,7 @@ func main() {
 				tb.InlineButton{Data: "wrong_word\n" + data[1], Text: "❌"},
 			}}
 			inlineMarkup := &tb.ReplyMarkup{InlineKeyboard: inlineKeys}
-			c.Send(fmt.Sprintf("Answer:\n\nWord: *%s*\nTranslation: *%s*", word.WordEn, word.WordRu), &tb.SendOptions{ParseMode: tb.ModeMarkdown}, inlineMarkup)
+			c.Send(fmt.Sprintf("Answer📝:\n\nWord: *%s*\nTranslation: *%s*", word.WordEn, word.WordRu), &tb.SendOptions{ParseMode: tb.ModeMarkdown}, inlineMarkup)
 
 		case "corr_word":
 			wordId, _ := strconv.Atoi(data[1])
@@ -158,8 +158,8 @@ func main() {
 			db.UpdateWord(word)
 			if word.Corr > 3 && word.Corr%2 == 0 {
 				inlineKeys := [][]tb.InlineButton{
-					{tb.InlineButton{Data: "del_word\n" + data[1], Text: "Delete it"}},
-					{tb.InlineButton{Data: "leave_word\n" + data[1], Text: "Leave it"}},
+					{tb.InlineButton{Data: "del_word\n" + data[1], Text: "Delete it 🗑️"}},
+					{tb.InlineButton{Data: "leave_word\n" + data[1], Text: "Leave it ✏️"}},
 				}
 				inlineMarkup := &tb.ReplyMarkup{InlineKeyboard: inlineKeys}
 				return c.Send(fmt.Sprintf("You guessed this word: *%d out of %d times*", word.Corr, word.Total), &tb.SendOptions{ParseMode: tb.ModeMarkdown}, inlineMarkup)
@@ -184,7 +184,7 @@ func main() {
 			return startQuiz(c)
 
 		default:
-			c.Send("Unknown command")
+			c.Send("Unknown command 😔")
 		}
 		return nil
 	})
